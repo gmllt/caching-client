@@ -1,0 +1,29 @@
+{
+    "name": "gmllt/caching-client",
+    "type": "library",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Gmllt\\CachingClient\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gmllt",
+            "email": "g.miraillet@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/http-client-contracts": "^3.0",
+        "psr/cache": "^3.0",
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "symfony/http-client": "^6.0",
+        "symfony/cache": "^6.0",
+        "ext-redis": "*",
+        "symfony/stopwatch": "^6.0",
+        "symfony/var-dumper": "^6.0",
+        "monolog/monolog": "^2.3"
+    }
+}

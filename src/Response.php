@@ -14,7 +14,7 @@ class Response implements ResponseInterface
     public const EXPIRE_AT = 'expireAt';
     public const EXPIRE_AFTER = 'expireAfter';
 
-    protected const STATUS_CDDE = 'statusCode';
+    protected const STATUS_CODE = 'statusCode';
     protected const CONTENT = 'content';
     protected const HEADERS = 'headers';
     protected const INFOS = 'infos';
@@ -98,12 +98,18 @@ class Response implements ResponseInterface
         return (null === $type) ? $this->infos : $this->infos[$type] ?? null;
     }
 
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
     protected function getCacheInfos(): array
     {
         $infos = $this->getInfo();
         unset($infos['pause_handler']);
         return [
-            self::STATUS_CDDE => $this->getStatusCode(),
+            self::STATUS_CODE => $this->getStatusCode(),
             self::CONTENT => $this->getContent(false),
             self::HEADERS => $this->getHeaders(false),
             self::INFOS => $infos,
@@ -115,7 +121,7 @@ class Response implements ResponseInterface
         $this->cacheCallBack = $callBack;
     }
 
-    public function getCacheCallBack(): ?callable
+    protected function getCacheCallBack(): ?callable
     {
         return $this->cacheCallBack;
     }
@@ -136,7 +142,7 @@ class Response implements ResponseInterface
         $this->cached = $cached;
     }
 
-    public function processCache() {
+    protected function processCache() {
         if(!$this->isCached() && null !== $this->getCacheCallBack()) {
             $this->cached = true;
             call_user_func_array($this->getCacheCallBack(), [
@@ -152,7 +158,7 @@ class Response implements ResponseInterface
     public static function buildFromCacheInfos(string $cacheKey, array $cacheInfos): self
     {
         $response = new self($cacheKey);
-        $response->statusCode = $cacheInfos[self::STATUS_CDDE] ?? 0;
+        $response->statusCode = $cacheInfos[self::STATUS_CODE] ?? 0;
         $response->content = $cacheInfos[self::CONTENT] ?? '';
         $response->headers = $cacheInfos[self::HEADERS] ?? [];
         $response->infos = $cacheInfos[self::INFOS] ?? [];
